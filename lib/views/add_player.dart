@@ -10,6 +10,7 @@ class AddPlayers extends StatefulWidget {
 }
 
 class _AddPlayersState extends State<AddPlayers> {
+  int index = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,7 +18,13 @@ class _AddPlayersState extends State<AddPlayers> {
       appBar: AppBar(
         leading: GestureDetector(
             onTap: () {
-              Navigator.pop(context);
+              if (index == 1) {
+                setState(() {
+                  index--;
+                });
+              } else {
+                Navigator.pop(context);
+              }
             },
             child: Icon(
               Icons.arrow_back_ios,
@@ -32,8 +39,14 @@ class _AddPlayersState extends State<AddPlayers> {
         actions: [
           IconButton(
               onPressed: () {
-                Navigator.pushReplacement(context,
-                    MaterialPageRoute(builder: (context) => HomeScreen()));
+                if (index == 0) {
+                  setState(() {
+                    index++;
+                  });
+                } else {
+                  Navigator.pushReplacement(context,
+                      MaterialPageRoute(builder: (context) => HomeScreen()));
+                }
               },
               icon: Icon(
                 Icons.next_plan,
@@ -41,98 +54,11 @@ class _AddPlayersState extends State<AddPlayers> {
               )),
         ],
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              Text(
-                'Team A Players',
-                style: TextStyle(
-                  fontSize: 20,
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: 10,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.only(bottom: 10),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          color: Colors.white,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.4),
-                              spreadRadius: 1,
-                              blurRadius: 4,
-                            ),
-                          ],
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Player Name:',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    'Maksudur Rahman',
-                                    style: TextStyle(
-                                      fontSize: 18,
-                                      color: Colors.grey.shade800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                height: 8,
-                              ),
-                              Row(
-                                children: [
-                                  Text(
-                                    'Player Role:',
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: Colors.grey.shade600,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 4,
-                                  ),
-                                  Text(
-                                    'Batsman',
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      color: Colors.grey.shade800,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    );
-                  }),
-            ],
-          ),
-        ),
-      ),
+      body: (index == 0)
+          ? Team(
+              teamName: 'Team A',
+            )
+          : Team(teamName: 'Team B'),
       floatingActionButton: FloatingActionButton(
         backgroundColor: Palette.primary,
         onPressed: () {
@@ -225,6 +151,114 @@ class _AddPlayersState extends State<AddPlayers> {
         },
         child: Icon(
           Icons.add,
+        ),
+      ),
+    );
+  }
+}
+
+class Team extends StatelessWidget {
+  final String teamName;
+  const Team({
+    super.key,
+    required this.teamName,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Text(
+              '$teamName Players',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+            SizedBox(
+              height: 12,
+            ),
+            ListView.builder(
+                physics: NeverScrollableScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: 11,
+                itemBuilder: (context, index) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        color: Colors.white,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.withOpacity(0.4),
+                            spreadRadius: 1,
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(
+                                  'Player Name:',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'Maksudur Rahman',
+                                  style: TextStyle(
+                                    fontSize: 18,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 8,
+                            ),
+                            Row(
+                              children: [
+                                Text(
+                                  'Player Role:',
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: 4,
+                                ),
+                                Text(
+                                  'Batsman',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.grey.shade800,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  );
+                }),
+            SizedBox(
+              height: 40,
+            ),
+          ],
         ),
       ),
     );
